@@ -1,6 +1,7 @@
 # admission
 
-A new Flutter project.
+After downloadin run the command from your project folder
+flutter pub get
 
 ## Getting Started
 
