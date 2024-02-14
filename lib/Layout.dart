@@ -1,3 +1,7 @@
+import 'package:admission/Call.dart';
+import 'package:admission/Share.dart';
+import 'package:admission/widget/DisplayIconText.dart';
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -61,48 +65,42 @@ class _LayoutState extends State<Layout> {
                     ],
                   ),
                   const SizedBox(height: 20),
-                  const Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Column(
-                        children: [
-                          FaIcon(
-                            FontAwesomeIcons.phone,
-                            color: Colors.blueAccent,
-                            size: 30,
-                          ),
-                          SizedBox(height: 20),
-                          Text(
-                            'call',
-                            style: TextStyle(fontSize: 20),
-                          ),
-                        ],
+                      DisplayIconText(
+                        onPressed: () async {
+                          final value = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const CallPage(
+                                      title: 'Call',
+                                    )),
+                          );
+                          AnimatedSnackBar.material(
+                            value.toString(),
+                            type: AnimatedSnackBarType.error,
+                            mobileSnackBarPosition: MobileSnackBarPosition.top,
+                          ).show(context);
+                        },
+                        icon: FontAwesomeIcons.phone,
+                        title: 'Call',
                       ),
-                      Column(
-                        children: [
-                          Icon(
-                            Icons.directions,
-                            color: Colors.blueAccent,
-                            size: 30,
-                          ),
-                          SizedBox(height: 20),
-                          Text(
-                            'route',
-                            style: TextStyle(fontSize: 20),
-                          ),
-                        ],
+                      DisplayIconText(
+                        onPressed: () => print('Route'),
+                        icon: FontAwesomeIcons.route,
+                        title: 'Route',
+                        color: Colors.green,
                       ),
-                      Column(
-                        children: [
-                          FaIcon(FontAwesomeIcons.share,
-                              size: 30, color: Colors.blueAccent),
-                          SizedBox(height: 20),
-                          Text(
-                            'share',
-                            style: TextStyle(fontSize: 20),
-                          ),
-                        ],
-                      ),
+                      DisplayIconText(
+                        onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SharePage()),
+                        ),
+                        icon: FontAwesomeIcons.shareNodes,
+                        title: 'Share',
+                      )
                     ],
                   ),
                   const Text(''' What is Lorem Ipsum?
