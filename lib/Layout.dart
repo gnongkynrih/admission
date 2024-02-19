@@ -1,5 +1,6 @@
 import 'package:admission/Call.dart';
 import 'package:admission/Share.dart';
+import 'package:admission/helpers/common.dart';
 import 'package:admission/widget/DisplayIconText.dart';
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
@@ -77,27 +78,22 @@ class _LayoutState extends State<Layout> {
                                       title: 'Call',
                                     )),
                           );
-                          AnimatedSnackBar.material(
-                            value.toString(),
-                            type: AnimatedSnackBarType.error,
-                            mobileSnackBarPosition: MobileSnackBarPosition.top,
-                          ).show(context);
+                          CommonHelper.animatedSnackBar(context,
+                              value.toString(), AnimatedSnackBarType.info);
                         },
                         icon: FontAwesomeIcons.phone,
                         title: 'Call',
                       ),
                       DisplayIconText(
-                        onPressed: () => print('Route'),
+                        onPressed: () => CommonHelper.animatedSnackBar(context,
+                            "You click on route", AnimatedSnackBarType.success),
                         icon: FontAwesomeIcons.route,
                         title: 'Route',
                         color: Colors.green,
                       ),
                       DisplayIconText(
-                        onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const SharePage()),
-                        ),
+                        onPressed: () => CommonHelper.animatedSnackBar(
+                            context, "Share", AnimatedSnackBarType.success),
                         icon: FontAwesomeIcons.shareNodes,
                         title: 'Share',
                       )

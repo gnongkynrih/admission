@@ -1,4 +1,5 @@
 import 'package:admission/Layout.dart';
+import 'package:admission/widget/screen/auth/login.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -17,6 +18,6 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: const Layout());
+        home: const Login());
   }
 }
