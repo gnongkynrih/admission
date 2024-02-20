@@ -1,11 +1,14 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:admission/helpers/common.dart';
 import 'package:admission/model/login_model.dart';
+import 'package:admission/provider/admission_provider.dart';
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -90,11 +93,8 @@ class _LoginState extends State<Login> {
                           isLoading = true;
                         });
                         //add delay
-                        Future.delayed(const Duration(seconds: 3), () {
+                        Future.delayed(const Duration(seconds: 1), () {
                           loginnow();
-                          setState(() {
-                            isLoading = false;
-                          });
                         });
                         // loginnow();
                         // setState(() {
@@ -116,7 +116,12 @@ class _LoginState extends State<Login> {
   loginnow() async {
     if (_loginFormKey.currentState!.validate()) {
       _loginFormKey.currentState!.save();
-      String url = 'http://localhost:8000/api/admission/login';
+      String url = '';
+      if (Platform.isAndroid) {
+        url = 'http://10.0.2.2:8000/api/admission/login';
+      } else {
+        url = 'http://localhost:8000/api/admission/login';
+      }
       try {
         var response = await http.post(Uri.parse(url), body: {
           'email': login.email,
@@ -130,12 +135,19 @@ class _LoginState extends State<Login> {
           CommonHelper.animatedSnackBar(
               context, data['message'], AnimatedSnackBarType.error);
         } else {
-          CommonHelper.animatedSnackBar(
-              context, data['message'], AnimatedSnackBarType.success);
+          print("{gordon $data['data']['id']}");
+
+          //set the user id to the provider
+          Provider.of<AdmissionProvider>(context, listen: false)
+              .setAdmissionUserId(data['data']['id']);
+          Navigator.popAndPushNamed(context, '/admissiondashboard');
         }
       } catch (e) {
-        print('gordon $e');
+        print(' $e');
       }
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 }
