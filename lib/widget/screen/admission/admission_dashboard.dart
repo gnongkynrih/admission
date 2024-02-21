@@ -48,15 +48,6 @@ class _AdmissionDashboardState extends State<AdmissionDashboard> {
       var data = jsonDecode(response.body);
       for (var item in data['applicants']) {
         applicantModel.add(ApplicantModel.fromJsonDashboard(item));
-        // ApplicantModel model = ApplicantModel(
-        //   uuid: item['uuid'],
-        //   first_name: item['first_name'],
-        //   last_name: item['last_name'],
-        //   middle_name: item['middle_name'],
-        //   passport: item['passport'],
-        //   class_name: item['class_name'],
-        // );
-        // applicantModel.add(model);
       }
       for (var pay in data['paidapplicant']) {
         admissionPaymentModel.add(AdmissionPaymentModel.fromJson(pay));
@@ -130,7 +121,7 @@ class _AdmissionDashboardState extends State<AdmissionDashboard> {
               ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Navigator.pushNamed(context, '/login');
+            Navigator.pushNamed(context, '/admissionpersonal');
           },
           child: const FaIcon(
             FontAwesomeIcons.plus,

@@ -1,5 +1,6 @@
 import 'package:admission/provider/admission_provider.dart';
 import 'package:admission/widget/screen/admission/admission_dashboard.dart';
+import 'package:admission/widget/screen/admission/personal.dart';
 import 'package:admission/widget/screen/auth/login.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         routes: {
           '/login': (context) => const Login(),
           '/admissiondashboard': (context) => const AdmissionDashboard(),
+          '/admissionpersonal': (context) => const PersonalScreen()
         });
   }
 }
