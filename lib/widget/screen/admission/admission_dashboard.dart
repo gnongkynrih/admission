@@ -23,6 +23,11 @@ class _AdmissionDashboardState extends State<AdmissionDashboard> {
   List<AdmissionPaymentModel> admissionPaymentModel = [];
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
+
+  @override
   void initState() {
     admission_user_id = Provider.of<AdmissionProvider>(context, listen: false)
         .admission_user_id;
@@ -48,6 +53,7 @@ class _AdmissionDashboardState extends State<AdmissionDashboard> {
       var data = jsonDecode(response.body);
       for (var item in data['applicants']) {
         applicantModel.add(ApplicantModel.fromJsonDashboard(item));
+        print(item);
       }
       for (var pay in data['paidapplicant']) {
         admissionPaymentModel.add(AdmissionPaymentModel.fromJson(pay));
@@ -84,18 +90,38 @@ class _AdmissionDashboardState extends State<AdmissionDashboard> {
                     children: [
                       for (var item in applicantModel)
                         Card(
-                          child: Column(
+                          child: Stack(
                             children: [
-                              CircleAvatar(
-                                radius: 40,
-                                child: Image.network(item.passport!),
+                              Positioned(
+                                right: 0,
+                                top: 0,
+                                child: IconButton(
+                                  onPressed: () {
+                                    Provider.of<AdmissionProvider>(context,
+                                            listen: false)
+                                        .setApplicantId(item.uuid);
+                                    Navigator.pushNamed(
+                                        context, '/admissionpersonal');
+                                  },
+                                  icon: const FaIcon(
+                                      FontAwesomeIcons.penToSquare),
+                                ),
                               ),
-                              const SizedBox(
-                                height: 20,
+                              Column(
+                                children: [
+                                  Center(
+                                    child: CircleAvatar(
+                                      radius: 40,
+                                      child: Image.network(item.passport!),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  Text(item.first_name!),
+                                  Text(item.class_name!),
+                                ],
                               ),
-                              Text(item.first_name!),
-                              Text(item.last_name!),
-                              Text(item.class_name!),
                             ],
                           ),
                         )
@@ -121,6 +147,8 @@ class _AdmissionDashboardState extends State<AdmissionDashboard> {
               ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
+            Provider.of<AdmissionProvider>(context, listen: false)
+                .setApplicantId(null);
             Navigator.pushNamed(context, '/admissionpersonal');
           },
           child: const FaIcon(

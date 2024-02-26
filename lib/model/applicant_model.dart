@@ -66,8 +66,8 @@ class ApplicantModel {
     this.nationality,
     this.community,
     this.religion_id,
-    this.is_catholic,
-    this.balang,
+    this.is_catholic = 'N',
+    this.balang = '',
     this.admission_user_id,
     this.address_proof,
     this.birth_certificate,
@@ -97,7 +97,7 @@ class ApplicantModel {
   //use factory method to get the id, name, class_name and passport
   factory ApplicantModel.fromJsonDashboard(Map<String, dynamic> json) {
     return ApplicantModel(
-      uuid: json['uuid'],
+      uuid: json['id'],
       first_name: json['first_name'],
       last_name: json['last_name'],
       middle_name: json['middle_name'],
