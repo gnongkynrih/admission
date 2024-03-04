@@ -279,9 +279,8 @@ class _PersonalScreenState extends State<PersonalScreen> {
                           height: 20,
                         ),
                         InputDatePickerFormField(
-                          initialDate: applicant.dob ??
-                              DateTime.now()
-                                  .subtract(const Duration(days: 365 * 4)),
+                          initialDate: DateTime.now()
+                              .subtract(const Duration(days: 365 * 4)),
                           onDateSaved: (value) {
                             applicant.dob = value;
                           },

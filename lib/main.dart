@@ -1,5 +1,6 @@
 import 'package:admission/provider/admission_provider.dart';
 import 'package:admission/widget/screen/admission/admission_dashboard.dart';
+import 'package:admission/widget/screen/admission/admission_payment.dart';
 import 'package:admission/widget/screen/admission/family.dart';
 import 'package:admission/widget/screen/admission/personal.dart';
 import 'package:admission/widget/screen/admission/select_image.dart';
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
           '/admissionfamily': (context) => const FamilyScreen(),
           '/admissionupload': (context) =>
               const UploadDocumentAdmissionScreen(),
+          '/admissionpayment': (context) => const AdmissionPaymentScreen()
         });
   }
 }

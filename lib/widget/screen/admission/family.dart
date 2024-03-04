@@ -18,6 +18,7 @@ class FamilyScreen extends StatefulWidget {
 class _FamilyScreenState extends State<FamilyScreen> {
   String applicantID = '';
   ApplicantModel applicant = ApplicantModel();
+  bool isLoading = true;
   void getApplicantDetail() async {
     String url = '';
     if (Platform.isAndroid) {
@@ -32,11 +33,13 @@ class _FamilyScreenState extends State<FamilyScreen> {
       });
       if (response.statusCode == 201) {
         var student = jsonDecode(response.body);
+
         setState(() {
           applicant.mother_name = student['data']['mother_name'];
           applicant.father_name = student['data']['father_name'];
           applicant.first_name = student['data']['first_name'];
           applicant.last_name = student['data']['last_name'];
+          isLoading = false;
         });
       } else {
         print('Response body: ${response.body}');
@@ -63,69 +66,75 @@ class _FamilyScreenState extends State<FamilyScreen> {
         title: Text('${applicant.first_name} ${applicant.last_name}'),
       ),
       body: Center(
-        child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Form(
-              key: familyFormKey,
-              child: Column(
-                children: [
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Father Name',
-                    ),
-                    initialValue: applicant.father_name,
-                    validator: (String? father) {
-                      if (father!.isEmpty) {
-                        return 'Please enter father name';
-                      }
-                      return null;
-                    },
-                    onSaved: (father) {
-                      applicant.father_name = father!;
-                    },
-                  ),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Mother Name',
-                    ),
-                    initialValue: applicant.mother_name,
-                    validator: (mother) {
-                      if (mother!.isEmpty) {
-                        return 'Please enter mother name';
-                      }
-                      return null;
-                    },
-                    onSaved: (mother) {
-                      applicant.mother_name = mother!;
-                    },
-                  ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.deepPurple,
-                      foregroundColor: Colors.white,
-                      maximumSize: const Size(120, 50),
-                    ),
-                    onPressed: () {
-                      if (familyFormKey.currentState!.validate()) {
-                        familyFormKey.currentState!.save();
-                        saveFamily();
-                        // Navigator.pushNamed(context, '/admissiondashboard');
-                      }
-                    },
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Text(
-                          'Next',
-                          style: TextStyle(fontSize: 18),
+        child: isLoading
+            ? const CircularProgressIndicator()
+            : Padding(
+                padding: const EdgeInsets.all(10),
+                child: Form(
+                  key: familyFormKey,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: 'Father Name',
                         ),
-                        Icon(Icons.arrow_forward_ios)
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            )),
+                        initialValue: applicant.father_name,
+                        validator: (String? father) {
+                          if (father!.isEmpty) {
+                            return 'Please enter father name';
+                          }
+                          return null;
+                        },
+                        onSaved: (father) {
+                          setState(() {
+                            applicant.father_name = father!;
+                          });
+                        },
+                      ),
+                      TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: 'Mother Name',
+                        ),
+                        initialValue: applicant.mother_name,
+                        validator: (mother) {
+                          if (mother!.isEmpty) {
+                            return 'Please enter mother name';
+                          }
+                          return null;
+                        },
+                        onSaved: (mother) {
+                          setState(() {
+                            applicant.mother_name = mother!;
+                          });
+                        },
+                      ),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.deepPurple,
+                          foregroundColor: Colors.white,
+                          maximumSize: const Size(120, 50),
+                        ),
+                        onPressed: () {
+                          if (familyFormKey.currentState!.validate()) {
+                            familyFormKey.currentState!.save();
+                            saveFamily();
+                            // Navigator.pushNamed(context, '/admissiondashboard');
+                          }
+                        },
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text(
+                              'Next',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                            Icon(Icons.arrow_forward_ios)
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                )),
       ),
     );
   }

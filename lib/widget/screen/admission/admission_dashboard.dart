@@ -21,7 +21,7 @@ class _AdmissionDashboardState extends State<AdmissionDashboard> {
   bool isLoading = true;
   List<ApplicantModel> applicantModel = []; //store all tghe applicant detail
   List<AdmissionPaymentModel> admissionPaymentModel = [];
-
+  int columns = 2;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -35,6 +35,7 @@ class _AdmissionDashboardState extends State<AdmissionDashboard> {
     setState(() {
       isLoading = false;
     });
+
     super.initState();
   }
 
@@ -68,6 +69,7 @@ class _AdmissionDashboardState extends State<AdmissionDashboard> {
 
   @override
   Widget build(BuildContext context) {
+    print('gordon ${MediaQuery.of(context).size.width}');
     return Scaffold(
         appBar: AppBar(
           title: const Text('Admission Dashboard'),
@@ -82,68 +84,71 @@ class _AdmissionDashboardState extends State<AdmissionDashboard> {
         ),
         body: isLoading
             ? const CircularProgressIndicator()
-            : Column(
-                children: [
-                  GridView.count(
-                    crossAxisCount: 2,
-                    shrinkWrap: true,
-                    children: [
-                      for (var item in applicantModel)
-                        Card(
-                          child: Stack(
-                            children: [
-                              Positioned(
-                                right: 0,
-                                top: 0,
-                                child: IconButton(
-                                  onPressed: () {
-                                    Provider.of<AdmissionProvider>(context,
-                                            listen: false)
-                                        .setApplicantId(item.uuid);
-                                    Navigator.pushNamed(
-                                        context, '/admissionpersonal');
-                                  },
-                                  icon: const FaIcon(
-                                      FontAwesomeIcons.penToSquare),
+            : SingleChildScrollView(
+                child: Column(
+                  children: [
+                    GridView.count(
+                      crossAxisCount:
+                          MediaQuery.of(context).size.width >= 600 ? 3 : 2,
+                      shrinkWrap: true,
+                      children: [
+                        for (var item in applicantModel)
+                          Card(
+                            child: Stack(
+                              children: [
+                                Positioned(
+                                  right: 0,
+                                  top: 0,
+                                  child: IconButton(
+                                    onPressed: () {
+                                      Provider.of<AdmissionProvider>(context,
+                                              listen: false)
+                                          .setApplicantId(item.uuid);
+                                      Navigator.pushNamed(
+                                          context, '/admissionpersonal');
+                                    },
+                                    icon: const FaIcon(
+                                        FontAwesomeIcons.penToSquare),
+                                  ),
                                 ),
-                              ),
-                              Column(
-                                children: [
-                                  Center(
-                                    child: CircleAvatar(
-                                      radius: 40,
-                                      child: Image.network(item.passport!),
+                                Column(
+                                  children: [
+                                    Center(
+                                      child: CircleAvatar(
+                                        radius: 40,
+                                        child: Image.network(item.passport!),
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  Text(item.first_name!),
-                                  Text(item.class_name!),
-                                ],
-                              ),
-                            ],
-                          ),
-                        )
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Text('Payment History ${admissionPaymentModel.length}'),
-                  Column(
-                    children:
-                        List.generate(admissionPaymentModel.length, (index) {
-                      return Row(
-                        children: [
-                          Text(admissionPaymentModel[index].r_payment_id),
-                          Text(admissionPaymentModel[index].amount),
-                          Text(admissionPaymentModel[index].status),
-                        ],
-                      );
-                    }),
-                  )
-                ],
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Text(item.first_name!),
+                                    Text(item.class_name!),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text('Payment History ${admissionPaymentModel.length}'),
+                    Column(
+                      children:
+                          List.generate(admissionPaymentModel.length, (index) {
+                        return Row(
+                          children: [
+                            Text(admissionPaymentModel[index].r_payment_id),
+                            Text(admissionPaymentModel[index].amount),
+                            Text(admissionPaymentModel[index].status),
+                          ],
+                        );
+                      }),
+                    )
+                  ],
+                ),
               ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
